@@ -77,7 +77,7 @@ export default {
 				extend: "dark",
 				colors: {
 						background: "#fffefe",
-						foreground: "#00000",
+						foreground: "#020817",
 						primary: {
 							50: "#D6E4FF",
 							100: "#ADC7FF",

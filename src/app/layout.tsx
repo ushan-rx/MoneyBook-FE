@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 // 1. import `HeroUIProvider` component
 import { HeroUIProvider } from '@heroui/react';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,7 +38,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <HeroUIProvider>{children}</HeroUIProvider>
+          <HeroUIProvider>
+            <DefaultLayout>{children}</DefaultLayout>
+          </HeroUIProvider>
         </ThemeProvider>
       </body>
     </html>
