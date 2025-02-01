@@ -12,8 +12,8 @@ export default {
   theme: {
   	extend: {
   		colors: {
-			background: 'var(--background)',
-			foreground: 'var(--foreground)',
+			background: 'hsl(varvar(--background))',
+			foreground: 'hsl(var(--foreground))',
 			card: 'hsl(var(--card))',
 			cardForeground: 'hsl(var(--card-foreground))',
 			popover: 'hsl(var(--popover))',
@@ -91,7 +91,7 @@ export default {
 						  DEFAULT: "#3265FF",
 						  foreground: "#ffffff",
 						},
-						focus: "#F182F6",
+						focus: "#454445",
 					  },
 			}
 		}
