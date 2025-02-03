@@ -15,25 +15,24 @@ export default function NavigationBar() {
   ];
 
   return (
-    <nav className='min-w-screen shadow-t fixed bottom-0 left-0 right-0 z-10 flex justify-center bg-gray-100 px-2 pb-3 pt-2'>
+    <nav className='fixed inset-x-0 bottom-0 z-10 flex justify-center bg-gray-100 px-2 pb-3 pt-2 dark:bg-gray-900'>
       <div className='mx-auto w-full max-w-md'>
-        <div className='rounded-lg bg-white shadow-lg'>
-          <div className='flex justify-center gap-6'>
+        <div className='rounded-lg bg-white shadow-lg dark:bg-black'>
+          <div className='flex justify-center gap-2'>
             {navigationItems.map((item) => (
-              <div key={item.name} className='group'>
-                <button
-                  onClick={() => router.push(item.href)}
-                  className={`mx-auto flex w-full items-end justify-center pt-2 text-center ${pathname === item.href ? 'text-indigo-500' : 'text-gray-400'}`}
-                >
-                  <span className='block pb-1 pt-1'>
-                    <DynamicIcon className='inline-block' name={item.icon} />
-                    <span className='block pb-2 text-sm'>{item.name}</span>
-                    {pathname === item.href ? (
-                      <span className='mx-auto block h-1 w-5 rounded-full bg-indigo-500'></span>
-                    ) : null}
-                  </span>
-                </button>
-              </div>
+              <button
+                key={item.name}
+                onClick={() => router.push(item.href)}
+                className={`mx-auto flex w-full items-end justify-center pt-2 text-center ${pathname === item.href ? 'text-indigo-500' : 'text-gray-400'}`}
+              >
+                <span className='block py-1'>
+                  <DynamicIcon className='inline-block' name={item.icon} />
+                  <span className='block pb-2 text-sm'>{item.name}</span>
+                  {pathname === item.href ? (
+                    <span className='mx-auto block h-1 w-5 rounded-full bg-indigo-500'></span>
+                  ) : null}
+                </span>
+              </button>
             ))}
           </div>
         </div>
