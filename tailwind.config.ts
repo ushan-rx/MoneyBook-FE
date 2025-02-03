@@ -12,7 +12,7 @@ export default {
   theme: {
   	extend: {
   		colors: {
-			background: 'hsl(varvar(--background))',
+			background: 'hsl(var(--background))',
 			foreground: 'hsl(var(--foreground))',
 			card: 'hsl(var(--card))',
 			cardForeground: 'hsl(var(--card-foreground))',

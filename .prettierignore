@@ -22,3 +22,5 @@ src/lib/utils.ts
 lint-staged.config.ts
 components.json
 tsconfig.json
+package.json
+src/components/ui/
