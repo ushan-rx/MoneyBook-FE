@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider } from '@heroui/react';
+import { Divider } from '@heroui/divider';
 
 export default function MutualTransactionsCard() {
   return (
@@ -8,11 +8,19 @@ export default function MutualTransactionsCard() {
         Jan - 2025
       </span>
       <ol className='grid w-full grid-cols-2 gap-y-1 px-3 pb-4 text-base text-slate-700 dark:text-slate-200'>
-        <li className='text-left text-primary-700'>New Loans:</li>
-        <li className='text-right font-semibold text-primary-700'>Rs.10,000</li>
+        <li className='text-left text-primary-700 dark:text-zinc-400'>
+          New Loans:
+        </li>
+        <li className='text-right font-semibold text-primary-700 dark:text-zinc-400'>
+          Rs.10,000
+        </li>
 
-        <li className='text-left text-primary-700'>New Borrowings:</li>
-        <li className='text-right font-semibold text-primary-700'>Rs.5,000</li>
+        <li className='text-left text-primary-700 dark:text-zinc-400'>
+          New Borrowings:
+        </li>
+        <li className='text-right font-semibold text-primary-700 dark:text-zinc-400'>
+          Rs.5,000
+        </li>
 
         <li className='text-left'>Collected Loans:</li>
         <li className='text-right font-semibold'>Rs.5,000</li>
@@ -26,7 +34,7 @@ export default function MutualTransactionsCard() {
           Total Loans: <span className='font-semibold'>Rs.10,000</span>
         </li>
         <li className='mt-4 w-full rounded-md border border-ring/60 bg-background/70 px-3 py-2 text-lg'>
-          Total Borrows: <span className='font-semibold'>Rs.5,000</span>
+          Total Borrowings: <span className='font-semibold'>Rs.5,000</span>
         </li>
       </ol>
     </div>

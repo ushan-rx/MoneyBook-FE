@@ -1,5 +1,4 @@
 import React from 'react';
-import NavigationBar from '@/components/NavigationBar';
 
 export default function DefaultLayout({
   children,
@@ -8,7 +7,7 @@ export default function DefaultLayout({
 }>) {
   return (
     <div className='flex h-screen flex-col'>
-      <header className='bg-green-50 py-4 text-center text-2xl'>
+      <header className='sticky inset-x-0 top-0 z-[999] min-h-[60px] bg-primary-300 py-4 text-center text-2xl text-white dark:bg-primary-900'>
         MONEYBOOK
       </header>
       <main>{children}</main>

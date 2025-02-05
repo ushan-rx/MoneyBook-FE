@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 
-// 1. import `HeroUIProvider` component
-import { HeroUIProvider } from '@heroui/react';
+import { HeroUIProvider } from '@heroui/system';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 const geistSans = Geist({

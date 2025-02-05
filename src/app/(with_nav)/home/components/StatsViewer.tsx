@@ -1,9 +1,10 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab, Card, CardBody, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Tabs, Tab } from '@heroui/tabs';
 
 import { Suspense, lazy } from 'react';
-import { Spinner } from '@heroui/react';
+import { Spinner } from '@heroui/spinner';
 
 const PersonalSpendingCard = lazy(() => import('./PersonalSpendingCard'));
 const MutualTransactionsCard = lazy(() => import('./MutualTransactionsCard'));
