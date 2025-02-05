@@ -25,7 +25,7 @@ export default async function RecentTransactions() {
   return (
     <div className='mx-2 mb-[100px] max-h-[640px] rounded border shadow-inner'>
       <Table aria-label='Recent transactions table'>
-        <TableHeader className='table-fixed bg-primary-50/40 text-base'>
+        <TableHeader className='bg-primary-50/40 text-base'>
           <TableRow>
             <TableHead className='w-[150px]'>Name</TableHead>
             <TableHead>Date</TableHead>
