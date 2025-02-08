@@ -11,7 +11,7 @@ export default function DateTimeComponent({
   type,
 }: {
   dateString: string;
-  type: string;
+  type: 'default' | 'time' | 'dateTime';
 }) {
   let formattedDate = '';
   try {

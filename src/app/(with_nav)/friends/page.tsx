@@ -9,7 +9,9 @@ export default function Friends() {
   return (
     <div className='flex flex-col'>
       <header className='flex flex-row items-center justify-between px-2 py-4'>
-        <span className='text-2xl font-semibold text-primary'>Friends</span>
+        <span className='pl-2 text-2xl font-semibold text-primary'>
+          Friends
+        </span>
         <div className='flex gap-4'>
           <Button
             isIconOnly

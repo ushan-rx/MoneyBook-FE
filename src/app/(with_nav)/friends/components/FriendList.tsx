@@ -1,5 +1,4 @@
 import DateTimeComponent from '@/components/DateTimeComponent';
-import { Fira_Code } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { lazy } from 'react';
@@ -186,11 +185,12 @@ export default function FriendList() {
                     )}
                   </div>
                   <div className='inline-flex flex-col items-end text-sm font-thin text-foreground/80'>
-                    <DateTimeComponent
-                      dateString={friend.LastTransaction?.date || ''}
-                      key={friend.LastTransaction?.date}
-                      type='default'
-                    />
+                    {friend.LastTransaction?.date && (
+                      <DateTimeComponent
+                        dateString={friend.LastTransaction?.date}
+                        type='default'
+                      />
+                    )}
                     <span className='text-foreground/50'>{`${friend.LastTransaction?.name} - Rs. ${friend.LastTransaction?.amount}`}</span>
                   </div>
                 </div>
