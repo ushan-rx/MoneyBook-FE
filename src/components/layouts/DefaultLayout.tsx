@@ -7,7 +7,7 @@ export default function DefaultLayout({
 }>) {
   return (
     <div className='flex h-screen flex-col'>
-      <header className='sticky inset-x-0 top-0 z-[999] min-h-[60px] bg-primary-300 py-4 text-center text-2xl text-white dark:bg-primary-900'>
+      <header className='sticky inset-x-0 top-0 z-[999] min-h-[60px] border-b-small border-primary-50 bg-gray-100 py-4 text-center text-2xl dark:bg-gray-900'>
         MONEYBOOK
       </header>
       <main>{children}</main>
