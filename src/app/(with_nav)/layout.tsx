@@ -1,4 +1,6 @@
+import LoadingDots from '@/components/LoadingDots';
 import NavigationBar from '@/components/NavigationBar';
+import { Suspense } from 'react';
 
 export default function WithNavLayout({
   children,
@@ -7,7 +9,7 @@ export default function WithNavLayout({
 }>) {
   return (
     <div>
-      {children}
+      <Suspense fallback={<LoadingDots />}>{children}</Suspense>
       <NavigationBar />
     </div>
   );

@@ -1,9 +1,11 @@
 import { Button } from '@heroui/button';
 import Link from 'next/link';
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { CirclePlus, Search } from 'lucide-react';
-import FriendList from './components/FriendList';
 import { Divider } from '@heroui/divider';
+import LoadingDots from '@/components/LoadingDots';
+const FriendList = lazy(() => import('./components/FriendList'));
+const AddFriendDrawer = lazy(() => import('./components/AddFriendDrawer'));
 
 export default function Friends() {
   return (
@@ -23,7 +25,8 @@ export default function Friends() {
             <Search />
             <Link href={'#'}></Link>
           </Button>
-          <Button
+          <AddFriendDrawer />
+          {/* <Button
             isIconOnly
             radius='full'
             variant='faded'
@@ -32,12 +35,14 @@ export default function Friends() {
           >
             <CirclePlus />
             <Link href={'#'}></Link>
-          </Button>
+          </Button> */}
         </div>
       </header>
       <Divider />
       <section className='h-[calc(100vh-225px)] overflow-y-auto p-2'>
-        <FriendList />
+        <Suspense fallback={<LoadingDots />}>
+          <FriendList />
+        </Suspense>
       </section>
     </div>
   );
