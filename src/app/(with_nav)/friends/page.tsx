@@ -26,16 +26,6 @@ export default function Friends() {
             <Link href={'#'}></Link>
           </Button>
           <AddFriendDrawer />
-          {/* <Button
-            isIconOnly
-            radius='full'
-            variant='faded'
-            color='primary'
-            aria-label='Add friend'
-          >
-            <CirclePlus />
-            <Link href={'#'}></Link>
-          </Button> */}
         </div>
       </header>
       <Divider />

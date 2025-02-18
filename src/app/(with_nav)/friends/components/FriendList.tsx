@@ -150,8 +150,8 @@ export default function FriendList() {
           className='divide-y divide-gray-200 dark:divide-gray-700'
         >
           {data.map((friend) => (
-            <Link href={`/${friend.id}`}>
-              <li key={friend.id} className='py-3 sm:py-4'>
+            <Link key={friend.id} href={`/${friend.id}`}>
+              <li className='py-3 sm:py-4'>
                 <div className='flex items-center space-x-4'>
                   <div className='flex-shrink-0'>
                     {friend.friendImage ? (
