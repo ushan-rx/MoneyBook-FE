@@ -1,7 +1,7 @@
 import { Button } from '@heroui/button';
 import Link from 'next/link';
 import React, { Suspense, lazy } from 'react';
-import { CirclePlus, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Divider } from '@heroui/divider';
 import LoadingDots from '@/components/LoadingDots';
 const FriendList = lazy(() => import('./components/FriendList'));
