@@ -3,7 +3,7 @@ export default function formatCurrency(
   currencyCode: string,
   locale?: string
 ): string {
-  const usedLocale = locale || navigator.language; // Use provided locale or browser's locale
+  const usedLocale = locale || 'LKR'; // Use provided locale or browser's locale
 
   try {
     return (
