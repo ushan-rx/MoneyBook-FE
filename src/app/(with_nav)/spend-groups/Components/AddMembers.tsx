@@ -96,10 +96,20 @@ export default function AddMembers({
   groupName: string;
 }) {
   const [values, setValues] = useState<Selection>(new Set([]));
-  const [friendList, setFriendList] = useState(friends);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
+  // to filter friends based on search query
+  const filteredList = React.useMemo(() => {
+    if (!searchQuery) {
+      return friends;
+    }
+    return friends.filter((friend) => {
+      return friend.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [searchQuery]);
+
+  // to store and update selected items at top
   const arrayValues = Array.from(values);
-
   const topContent = React.useMemo(() => {
     if (!arrayValues.length) {
       return null;
@@ -130,45 +140,50 @@ export default function AddMembers({
           {topContent}
         </Card>
       )}
-
-      <Form className='relative w-full'>
-        <Input
-          type='text'
-          placeholder='Search by name...'
-          className='text-medium'
-        />
-      </Form>
-      <ListboxWrapper>
-        <Listbox
-          classNames={{
-            list: 'max-h-[calc(100vh-500px)] overflow-scroll',
-          }}
-          items={friendList}
-          label='Assigned to'
-          selectionMode='multiple'
-          variant='flat'
-          onSelectionChange={setValues}
-        >
-          {(item) => (
-            <ListboxItem key={item.id} textValue={item.name}>
-              <div className='flex items-center gap-2'>
-                <Avatar
-                  alt={item.name}
-                  className='flex-shrink-0'
-                  size='sm'
-                  src={item.avatar}
-                />
-                <div className='flex flex-col'>
-                  <span className='text-small'>{item.name}</span>
-                  <span className='text-tiny text-default-400'>
-                    {item.email}
-                  </span>
+      <section className='h-[calc(100vh-440px)]'>
+        <Form className='relative w-full'>
+          <Input
+            type='text'
+            placeholder='Search by name...'
+            className='text-medium'
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+          />
+        </Form>
+        <ListboxWrapper>
+          <Listbox
+            classNames={{
+              list: 'max-h-[calc(100vh-500px)] overflow-scroll',
+            }}
+            items={filteredList}
+            label='Assigned to'
+            selectionMode='multiple'
+            variant='flat'
+            onSelectionChange={setValues}
+          >
+            {(item) => (
+              <ListboxItem key={item.id} textValue={item.name}>
+                <div className='flex items-center gap-2'>
+                  <Avatar
+                    alt={item.name}
+                    className='flex-shrink-0'
+                    size='sm'
+                    src={item.avatar}
+                  />
+                  <div className='flex flex-col'>
+                    <span className='text-small'>{item.name}</span>
+                    <span className='text-tiny text-default-400'>
+                      {item.email}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </ListboxItem>
-          )}
-        </Listbox>
-      </ListboxWrapper>
+              </ListboxItem>
+            )}
+          </Listbox>
+        </ListboxWrapper>
+      </section>
       <Button variant='solid' color='primary' className='mx-2 mb-4'>
         Add
       </Button>
