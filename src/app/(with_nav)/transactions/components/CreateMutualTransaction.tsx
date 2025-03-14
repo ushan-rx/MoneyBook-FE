@@ -9,12 +9,13 @@ import { NumberInput } from '@heroui/number-input';
 import { Listbox, ListboxItem } from '@heroui/listbox';
 import { Radio, RadioGroup } from '@heroui/radio';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ZonedDateTime, parseAbsoluteToLocal } from '@internationalized/date';
+import { parseAbsoluteToLocal } from '@internationalized/date';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@heroui/button';
 import TransactionPendingCard from './TransactionPendingCard';
+import { CreateMutualTransactionSchema } from '@/validations/TransactionValidations';
 
 export const users = [
   {
@@ -91,35 +92,6 @@ export const users = [
   },
 ];
 
-const CreateMutualTransactionSchema = z.object({
-  amount: z
-    .number({ message: 'Transaction amount must be a number' })
-    .positive({ message: 'Transaction amount must be a positive number' }),
-  transactionName: z
-    .string()
-    .nonempty({ message: 'Transaction name must be at least 3 characters' })
-    .min(3, { message: 'Transaction name must be at least 3 characters' }),
-  description: z
-    .string()
-    .max(100, { message: 'Description must be less than 100 characters' })
-    .optional(),
-  transactionType: z.enum(
-    Object.values(MutualTransactionType) as [
-      MutualTransactionType,
-      ...MutualTransactionType[],
-    ],
-    { message: 'Transaction type is Incorrect' }
-  ),
-  date: z.custom<ZonedDateTime>(
-    (val) => {
-      return val instanceof ZonedDateTime;
-    },
-    { message: 'Invalid DateTime format' }
-  ),
-  borrowerID: z.string({ message: 'Friend is required' }).nonempty(),
-  lenderID: z.string().nonempty(),
-});
-
 type FormValues = z.infer<typeof CreateMutualTransactionSchema>;
 
 export default function CreateMutualTransaction() {
@@ -141,7 +113,6 @@ export default function CreateMutualTransaction() {
       transactionType: MutualTransactionType.LOAN,
       transactionName: '',
       date: parseAbsoluteToLocal(new Date().toISOString()),
-      amount: 0,
       description: '',
       lenderID: '1',
     },
@@ -326,14 +297,14 @@ export default function CreateMutualTransaction() {
               control={control}
               name='amount'
               render={({
-                field: { name, value, onChange, onBlur, ref },
+                field: { name, onChange, onBlur, ref },
                 fieldState: { invalid, error },
               }) => (
                 <NumberInput
-                  type='number'
-                  maxLength={15}
+                  name={name}
                   ref={ref}
                   isRequired
+                  maxValue={9999999999}
                   className='font-semibold'
                   errorMessage={error?.message}
                   validationBehavior='aria'
@@ -341,8 +312,6 @@ export default function CreateMutualTransaction() {
                   label='Transaction Amount: (Rs.)'
                   labelPlacement='outside'
                   placeholder=' '
-                  name={name}
-                  value={value}
                   onBlur={onBlur}
                   onChange={onChange}
                 />

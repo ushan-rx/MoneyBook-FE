@@ -17,45 +17,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Card, CardBody } from '@heroui/card';
 import Image from 'next/image';
+import { PersonalTransactionSchema } from '@/validations/TransactionValidations';
 
-const PersonalTransaction = z.object({
-  transactionName: z
-    .string()
-    .nonempty({ message: 'Transaction name must be at least 3 characters' })
-    .min(3, { message: 'Transaction name must be at least 3 characters' }),
-  transactionType: z.enum(
-    Object.values(PersonalTransactionType) as [
-      PersonalTransactionType,
-      ...PersonalTransactionType[],
-    ],
-    { message: 'Transaction type is Incorrect' }
-  ),
-  transactionAmount: z
-    .number({ message: 'Transaction amount must be a number' })
-    .positive({ message: 'Transaction amount must be a positive number' }),
-  category: z.enum(
-    Object.values(TransactionCategories) as [
-      TransactionCategories,
-      ...TransactionCategories[],
-    ],
-    {
-      message: 'Transaction Category is Incorrect',
-    }
-  ),
-  description: z
-    .string()
-    .max(100, { message: 'Description must be less than 100 characters' })
-    .optional(),
-  transactionDate: z.custom<ZonedDateTime>(
-    (val) => {
-      return val instanceof ZonedDateTime;
-    },
-    { message: 'Invalid ZonedDateTime format' }
-  ),
-  userId: z.string().nonempty(),
-});
-
-type FormValues = z.infer<typeof PersonalTransaction>;
+type FormValues = z.infer<typeof PersonalTransactionSchema>;
 
 // Transaction Categories List for select input from enum
 const TransactionCategoriesList = Object.entries(TransactionCategories).map(
@@ -74,14 +38,13 @@ export default function CreatePersonalTransaction() {
     formState,
     formState: { isSubmitting, isSubmitSuccessful },
   } = useForm<FormValues>({
-    resolver: zodResolver(PersonalTransaction),
+    resolver: zodResolver(PersonalTransactionSchema),
     defaultValues: {
       userId: '1',
       transactionType: PersonalTransactionType.INCOME,
       transactionName: '',
       transactionDate: parseAbsoluteToLocal(new Date().toISOString()),
       description: '',
-      transactionAmount: 0,
     },
   });
 
@@ -170,13 +133,12 @@ export default function CreatePersonalTransaction() {
               control={control}
               name='transactionAmount'
               render={({
-                field: { name, value, onChange, onBlur, ref },
+                field: { name, onChange, onBlur, ref },
                 fieldState: { invalid, error },
               }) => (
                 <NumberInput
-                  type='number'
-                  maxLength={15}
                   ref={ref}
+                  maxValue={9999999999}
                   isRequired
                   className='font-semibold'
                   errorMessage={error?.message}
@@ -186,7 +148,6 @@ export default function CreatePersonalTransaction() {
                   labelPlacement='outside'
                   placeholder=' '
                   name={name}
-                  value={value}
                   onBlur={onBlur}
                   onChange={onChange}
                 />

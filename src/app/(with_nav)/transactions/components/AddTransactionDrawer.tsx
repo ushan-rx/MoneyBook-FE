@@ -17,7 +17,6 @@ import CreateMutualTransaction from './CreateMutualTransaction';
 export default function AddTransactionDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [formType, setFormType] = React.useState('personal');
-  const [success, setSuccess] = React.useState<boolean>(false);
 
   return (
     <div>
