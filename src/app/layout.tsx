@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-
+import { ThemeProvider } from '@/providers/theme-provider';
 import { HeroUIProvider } from '@heroui/system';
+import { ToastProvider } from '@heroui/toast';
+import QueryProvider from '@/providers/QueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,7 +37,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <HeroUIProvider>{children}</HeroUIProvider>
+          <QueryProvider>
+            <HeroUIProvider>
+              <ToastProvider />
+              {children}
+            </HeroUIProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
