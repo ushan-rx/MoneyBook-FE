@@ -4,14 +4,14 @@ import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Tabs, Tab } from '@heroui/tabs';
 
 import { Suspense, lazy } from 'react';
-import { Spinner } from '@heroui/spinner';
+import LoadingDots from '@/components/LoadingDots';
 
 const PersonalSpendingCard = lazy(() => import('./PersonalSpendingCard'));
 const MutualTransactionsCard = lazy(() => import('./MutualTransactionsCard'));
 
 export default function StatsViewer() {
   const [selected, setSelected] = React.useState<string | number | null>(
-    'login'
+    'personal'
   );
 
   return (
@@ -20,7 +20,7 @@ export default function StatsViewer() {
         shadow='sm'
         className='mx-3 mt-2 h-[380px] max-w-full bg-gradient-to-b from-white to-cyan-50 dark:bg-gradient-to-t dark:from-blue-950 dark:via-sky-900 dark:to-slate-950'
       >
-        <Suspense fallback={<Spinner size='md' />}>
+        <Suspense fallback={<LoadingDots />}>
           <CardBody className='justify-end overflow-hidden'>
             <Tabs
               fullWidth
