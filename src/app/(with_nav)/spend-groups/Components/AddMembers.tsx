@@ -128,7 +128,7 @@ export default function AddMembers({
         ))}
       </ScrollShadow>
     );
-  }, [arrayValues.length]);
+  }, [arrayValues]);
 
   return (
     <div className='flex min-h-[100px] flex-col gap-4'>
@@ -168,7 +168,7 @@ export default function AddMembers({
                 <div className='flex items-center gap-2'>
                   <Avatar
                     alt={item.name}
-                    className='flex-shrink-0'
+                    className='shrink-0'
                     size='sm'
                     src={item.avatar}
                   />

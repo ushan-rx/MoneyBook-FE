@@ -1,4 +1,4 @@
-import formatCurrency from '@/lib/CurrencyFormatter';
+import formatCurrency from '@/lib/currencyFormatter';
 import { Card, CardBody } from '@heroui/card';
 import React from 'react';
 

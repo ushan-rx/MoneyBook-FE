@@ -1,3 +1,4 @@
+'use client';
 import { useDisclosure } from '@heroui/use-disclosure';
 import {
   Drawer,
