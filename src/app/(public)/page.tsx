@@ -1,14 +1,16 @@
 'use client';
-import React, { Suspense, useEffect } from 'react';
-import LoginSectionSwitcher from '../components/LoginSectionSwitcher';
-import { useUserStore } from '@/store/user-store';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import LoadingDots from '@/components/LoadingDots';
+import { useUser } from '@/hooks/useUser';
+const LoginSectionSwitcher = lazy(
+  () => import('./components/LoginSectionSwitcher')
+);
 
 export default function Page() {
   const router = useRouter();
-  const { user, isLoading } = useUserStore();
+  const { user, isLoading } = useUser();
 
   useEffect(() => {
     // If user is authenticated, redirect to home
@@ -24,8 +26,9 @@ export default function Page() {
         <span className='ml-2'>Checking authentication...</span>
       </div>
     );
-  } else if (user === null) {
-    // If user is null (not authenticated), show login section
+  }
+  // If user is null (not authenticated), show login section
+  if (!user) {
     return (
       <div className='flex h-screen items-center justify-center'>
         <Suspense fallback={<LoadingDots />}>

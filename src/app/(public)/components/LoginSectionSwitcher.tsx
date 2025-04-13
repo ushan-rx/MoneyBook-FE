@@ -6,9 +6,11 @@ import LoginSection from './LoginSection';
 import Image from 'next/image';
 import { Button } from '@heroui/button';
 import { ChevronsDown, ChevronsUp } from 'lucide-react';
+import { useUserStore } from '@/store/user-store';
 
 export default function LoginSectionSwitcher() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { error } = useUserStore();
 
   return (
     <div className='flex h-fit flex-col items-center'>
@@ -55,25 +57,27 @@ export default function LoginSectionSwitcher() {
         </div>
       </motion.div>
       {/* Toggle Button */}
-      <Button
-        className='fixed bottom-8'
-        size='lg'
-        isIconOnly
-        variant='light'
-        onPress={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? (
-          <ChevronsDown
-            size={100}
-            className='text-slate-600 dark:text-slate-300'
-          />
-        ) : (
-          <ChevronsUp
-            size={100}
-            className='text-slate-600 dark:text-slate-300'
-          />
-        )}
-      </Button>
+      {error && (
+        <Button
+          className='fixed bottom-8'
+          size='lg'
+          isIconOnly
+          variant='light'
+          onPress={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <ChevronsDown
+              size={100}
+              className='text-slate-600 dark:text-slate-300'
+            />
+          ) : (
+            <ChevronsUp
+              size={100}
+              className='text-slate-600 dark:text-slate-300'
+            />
+          )}
+        </Button>
+      )}
     </div>
   );
 }
