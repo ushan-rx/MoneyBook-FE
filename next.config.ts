@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'api.qrserver.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com'
       }
     ]
   }

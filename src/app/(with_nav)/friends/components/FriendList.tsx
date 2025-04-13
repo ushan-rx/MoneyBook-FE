@@ -150,10 +150,10 @@ export default function FriendList() {
           className='divide-y divide-gray-200 dark:divide-gray-700'
         >
           {data.map((friend) => (
-            <Link key={friend.id} href={`/${friend.id}`}>
+            <Link key={friend.id} href={`/friends/${friend.id}`}>
               <li className='py-3 sm:py-4'>
                 <div className='flex items-center space-x-4'>
-                  <div className='flex-shrink-0'>
+                  <div className='shrink-0'>
                     {friend.friendImage ? (
                       <Image
                         src={friend.friendImage}
@@ -163,7 +163,7 @@ export default function FriendList() {
                         className='rounded-full'
                       />
                     ) : (
-                      <CircleUser className='h-8 w-8 rounded-full text-gray-400 dark:text-gray-500' />
+                      <CircleUser className='size-8 rounded-full text-gray-400 dark:text-gray-500' />
                     )}
                   </div>
                   <div className='min-w-0 flex-1'>
