@@ -1,29 +1,13 @@
+import { User } from '@/store/user-store';
 import api from './api';
 
-export async function fetchUser() {
-  try {
-    const res = await api.get('/auth/me');
-
-    // Extract user data from the response based on your API structure
-    if (res.data && res.data.data) {
-      return res.data.data;
-    }
-    console.log(res.data);
-    return null;
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    return null;
+export async function fetchUser(): Promise<User> {
+  const res = await api.get('/auth/me');
+  const userData = res.data?.data;
+  if (!userData) {
+    throw new Error('User data not found in response');
   }
-}
-
-export async function refreshAccessToken() {
-  try {
-    const res = await api.post('/auth/refresh');
-    return res.status === 200;
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-    return false;
-  }
+  return userData;
 }
 
 export async function logoutUser() {

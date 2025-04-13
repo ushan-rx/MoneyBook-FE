@@ -1,8 +1,7 @@
 'use client';
 import { create } from 'zustand';
-import api from '@/lib/api';
 
-interface User {
+export interface User {
   userId: string;
   firstName?: string;
   lastName?: string;
@@ -11,40 +10,28 @@ interface User {
 
 interface UserStore {
   user: User | null;
-  isLoading: boolean;
   error: string | null;
-  fetchUser: () => Promise<void>;
-  updateUser: (user: Partial<User>) => void;
+  updateUser: (user: User | Partial<User> | null) => void;
+  setError: (error: string | null) => void;
 }
 
 export const useUserStore = create<UserStore>()((set) => ({
   user: null,
-  isLoading: false,
   error: null,
 
-  fetchUser: async () => {
-    try {
-      set({ isLoading: true, error: null });
-
-      const response = await api.get('/auth/me');
-
-      // Extract user data from response 
-      const userData = response.data?.data;
-
-      if (userData) {
-        set({ user: userData, isLoading: false });
-      } else {
-        set({ error: 'User data not found in response', isLoading: false });
-      }
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
-      set({ error: 'Failed to fetch user data', isLoading: false });
+  updateUser: (updatedUser) => {
+    if (updatedUser === null) {
+      set({ user: null });
+      return;
     }
+    set((state) => ({
+      user: state.user
+        ? { ...state.user, ...updatedUser }
+        : (updatedUser as User),
+    }));
   },
 
-  updateUser: (updatedUser) => {
-    set((state) => ({
-      user: state.user ? { ...state.user, ...updatedUser } : null,
-    }));
+  setError: (error) => {
+    set({ error });
   },
 }));

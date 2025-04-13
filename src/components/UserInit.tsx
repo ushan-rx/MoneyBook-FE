@@ -1,37 +1,25 @@
 'use client';
-
 import { useEffect, useState, useMemo } from 'react';
-import { useUserStore } from '@/store/user-store';
 import { useRouter, usePathname } from 'next/navigation';
+import { useUser } from '@/hooks/useUser';
 
 export function UserInit() {
-  const { fetchUser, user, isLoading, error } = useUserStore();
+  const { user, error, isLoading, refetch } = useUser();
   const [retries, setRetries] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
-  const publicPaths = useMemo(() => ['/', '/onboarding'], []);
+  const publicPaths = useMemo(() => ['/'], []);
 
   useEffect(() => {
     // Fetch user data if not already loaded
-    if (!user && !isLoading && retries < 3) {
-      fetchUser();
+    if (!user && !isLoading && retries < 1) {
+      refetch();
       setRetries((prev) => prev + 1);
     }
-
-    // Handle persistent errors that might indicate auth issues
-    if (error && retries >= 3 && !publicPaths.includes(pathname)) {
+    if (error && retries >= 1 && !publicPaths.includes(pathname)) {
       router.push('/');
     }
-  }, [
-    fetchUser,
-    user,
-    isLoading,
-    error,
-    retries,
-    router,
-    pathname,
-    publicPaths,
-  ]);
+  }, [user, isLoading, error, retries, router, pathname, publicPaths, refetch]);
 
   return null;
 }
