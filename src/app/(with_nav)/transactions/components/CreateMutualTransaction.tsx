@@ -17,6 +17,7 @@ import { Button } from '@heroui/button';
 import TransactionPendingCard from './TransactionPendingCard';
 import { CreateMutualTransactionSchema } from '@/validations/TransactionValidations';
 
+// mock data
 export const users = [
   {
     id: '1',
@@ -92,6 +93,7 @@ export const users = [
   },
 ];
 
+// infer types from validation
 type FormValues = z.infer<typeof CreateMutualTransactionSchema>;
 
 export default function CreateMutualTransaction() {
