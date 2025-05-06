@@ -12,8 +12,17 @@ export async function fetchUser(): Promise<User> {
 
 export async function logoutUser() {
   try {
-    await api.post('/logout');
-    window.location.href = '/';
+    const res = await api.post('/logout');
+    if (res.status === 200) {
+      // Handle successful logout
+      console.log('Logout successful');
+      //redirect the user or perform other actions
+      window.location.href = '/'; // Redirect to login page
+    } else {
+      // Handle unsuccessful logout
+      console.error('Logout failed:', res.statusText);
+      return false;
+    }
   } catch (error) {
     console.error('Error logging out:', error);
   }
