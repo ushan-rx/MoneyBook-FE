@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import { HeroUIProvider } from '@heroui/system';
 import { ToastProvider } from '@heroui/toast';
 import QueryProvider from '@/providers/QueryProvider';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,8 +40,9 @@ export default function RootLayout({
         >
           <QueryProvider>
             <HeroUIProvider>
-              <ToastProvider />
+              <ToastProvider placement='top-center' />
               {children}
+              <Toaster />
             </HeroUIProvider>
           </QueryProvider>
         </ThemeProvider>
