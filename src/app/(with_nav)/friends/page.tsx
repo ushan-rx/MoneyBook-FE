@@ -1,7 +1,7 @@
 import { Button } from '@heroui/button';
 import Link from 'next/link';
 import React, { Suspense, lazy } from 'react';
-import { Search } from 'lucide-react';
+import { Search, UserRoundCheck } from 'lucide-react';
 import { Divider } from '@heroui/divider';
 import LoadingDots from '@/components/LoadingDots';
 import { requireAuth } from '@/lib/server-auth';
@@ -27,6 +27,17 @@ export default async function Friends() {
             >
               <Search />
               <Link href={'#'}></Link>
+            </Button>
+            <Button
+              isIconOnly
+              radius='full'
+              variant='faded'
+              color='primary'
+              aria-label='search friend'
+            >
+              <Link href={'/friends/requests'}>
+                <UserRoundCheck />
+              </Link>
             </Button>
             <Suspense fallback={<LoadingDots />}>
               <AddFriendDrawer />

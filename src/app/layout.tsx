@@ -40,9 +40,12 @@ export default function RootLayout({
         >
           <QueryProvider>
             <HeroUIProvider>
-              <ToastProvider placement='top-center' />
               {children}
               <Toaster />
+              <ToastProvider
+                placement='top-center'
+                toastProps={{ timeout: 200 }}
+              />
             </HeroUIProvider>
           </QueryProvider>
         </ThemeProvider>

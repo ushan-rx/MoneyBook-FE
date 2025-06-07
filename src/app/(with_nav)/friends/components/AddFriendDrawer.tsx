@@ -26,6 +26,7 @@ interface NormalUserBriefDto {
   email: string;
   firstName: string;
   lastName: string;
+  bio?: string;
   profilePicture: string | null;
 }
 
@@ -243,6 +244,7 @@ export default function AddFriendDrawer() {
                           selectedUser.profilePicture ||
                           'https://heroui.com/avatars/avatar-1.png'
                         }
+                        bio={selectedUser.bio}
                         userId={selectedUser.userId}
                       />
                     )}
