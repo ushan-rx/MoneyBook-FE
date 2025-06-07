@@ -1,5 +1,5 @@
 import { uploadFileToCloudinary } from '@/app/actions/uploadActions';
-import { toast } from '@/hooks/use-toast';
+import { addToast } from '@heroui/toast';
 
 /**
  * File types supported by the upload utils
@@ -46,9 +46,10 @@ export async function uploadFile(
     throw new Error(`Invalid file type. Expected ${type}, got ${file.type}`);
   }
 
-  toast({
+  addToast({
     title: 'Uploading file...',
-    description: `Uploading ${file.name}. Please wait.`,
+    description: `Uploading file. Please wait.`,
+    timeout: 1200,
   });
 
   const formData = new FormData();
@@ -60,18 +61,19 @@ export async function uploadFile(
 
   if (!result.success || !result.url) {
     const errorMsg = result.error || `Failed to upload ${file.name}`;
-    toast({
+    addToast({
       title: 'Upload Failed',
       description: errorMsg,
-      variant: 'destructive',
+      color: 'danger',
     });
     throw new Error(errorMsg);
   }
 
-  toast({
-    title: 'Upload Complete',
-    description: `${file.name} uploaded successfully.`,
-  });
+  // addToast({
+  //   title: 'Upload Complete',
+  //   description: 'File uploaded successfully.',
+  //   color: 'success',
+  // });
 
   return result.url;
 }
@@ -101,23 +103,23 @@ export async function uploadFiles(
   );
 
   if (validFiles.length === 0) {
-    toast({
+    addToast({
       title: 'No Valid Files',
       description: `None of the files match the expected ${type} type.`,
-      variant: 'destructive',
+      color: 'danger',
     });
     return [];
   }
 
   if (validFiles.length !== files.length) {
-    toast({
+    addToast({
       title: 'Some Files Skipped',
       description: `${files.length - validFiles.length} files were skipped due to invalid type.`,
-      variant: 'destructive',
+      color: 'danger',
     });
   }
 
-  toast({
+  addToast({
     title: 'Uploading files...',
     description: `Uploading ${validFiles.length} file(s). Please wait.`,
   });
@@ -139,20 +141,20 @@ export async function uploadFiles(
   try {
     // Wait for all uploads to complete
     const uploadedUrls = await Promise.all(uploadPromises);
-    toast({
+    addToast({
       title: 'Uploads complete!',
       description: `${uploadedUrls.length} file(s) uploaded successfully.`,
     });
     return uploadedUrls;
   } catch (error) {
     console.error('Error during file uploads:', error);
-    toast({
+    addToast({
       title: 'Upload Failed',
       description:
         error instanceof Error
           ? error.message
           : 'An unknown error occurred during upload.',
-      variant: 'destructive',
+      color: 'danger',
     });
     throw error;
   }
