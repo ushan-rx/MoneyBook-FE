@@ -25,22 +25,39 @@ import { Loader2 } from 'lucide-react';
 import { useUserStore } from '@/store/user-store';
 import api from '@/lib/api';
 import { useEffect, useState } from 'react';
+import { Textarea } from '@/components/ui/textarea';
 
-// Define the form schema with Zod
 const formSchema = z.object({
   firstName: z
     .string()
-    .min(2, { message: 'First name must be at least 2 characters' }),
+    .min(2, { message: 'First name must be at least 2 characters' })
+    .max(50, {
+      message: 'First name must not exceed 50 characters',
+    }),
   lastName: z
     .string()
-    .min(2, { message: 'Last name must be at least 2 characters' }),
+    .min(2, { message: 'Last name must be at least 2 characters' })
+    .max(50, {
+      message: 'Last name must not exceed 50 characters',
+    }),
+  bio: z
+    .string()
+    .min(2, { message: 'Bio must be at least 2 characters' })
+    .max(100, {
+      message: 'Bio must not exceed 100 characters',
+    }),
   phoneNumber: z
     .string()
     .min(10, { message: 'Please enter a valid phone number' })
     .regex(/^[0-9+\-\s()]*$/, {
       message: 'Phone number can only contain digits, spaces, and +()-',
     }),
-  address: z.string().min(5, { message: 'Please enter a valid address' }),
+  address: z
+    .string()
+    .min(5, { message: 'Please enter a valid address' })
+    .max(255, {
+      message: 'Address must not exceed 255 characters',
+    }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,6 +74,10 @@ export default function UserDetailsForm() {
   // Check if the user is allowed to access this page
   useEffect(() => {
     const checkAccess = async () => {
+      if (user === undefined) {
+        return; // user store Still loading, don't check access yet
+      }
+
       if (user?.userId) {
         const isNewUser = !user.firstName || !user.lastName || !user.email;
         if (isNewUser) {
@@ -78,7 +99,6 @@ export default function UserDetailsForm() {
     checkAccess();
   }, [user, router]);
 
-  // Initialize React Hook Form with Zod validation
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -86,6 +106,7 @@ export default function UserDetailsForm() {
       lastName: '',
       phoneNumber: '',
       address: '',
+      bio: '',
     },
   });
 
@@ -95,14 +116,18 @@ export default function UserDetailsForm() {
       if (!user?.userId) {
         throw new Error('User ID not found');
       }
+      // add profile picture to the data
+      const updatedData = {
+        ...data,
+        profilePicture: user.profilePicture || '', // Use existing profile picture if available
+      };
 
-      // Use the api instance for the PUT request
-      const response = await api.put(`/users/update-user/${user.userId}`, data);
+      const response = await api.put(`/users/${user.userId}`, updatedData);
 
       // Update local store with new user data
       updateUserInStore({
         ...user,
-        ...data,
+        ...updatedData,
       });
 
       return response.data;
@@ -130,7 +155,7 @@ export default function UserDetailsForm() {
     );
   }
 
-  // Add this condition to prevent showing the form to unauthorized users
+  // prevent showing the form to unauthorized users
   if (!isAuthorized) {
     return (
       <div className='flex h-screen items-center justify-center'>
@@ -184,6 +209,26 @@ export default function UserDetailsForm() {
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name='bio'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bio</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className='resize-none text-xs'
+                        rows={3}
+                        maxLength={100}
+                        placeholder='Hey there!!'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

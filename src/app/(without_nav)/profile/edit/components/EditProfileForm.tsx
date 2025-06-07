@@ -25,6 +25,7 @@ import { useUser } from '@/hooks/useUser';
 import api from '@/lib/api';
 import { addToast } from '@heroui/toast';
 import { uploadImage } from '@/lib/uploadUtils';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function EditProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +45,7 @@ export default function EditProfileForm() {
       phoneNumber: '',
       address: '',
       profilePicture: '',
+      bio: '',
     },
   });
 
@@ -60,6 +62,7 @@ export default function EditProfileForm() {
         }
 
         const userData = response.data?.data;
+        console.log('Fetched user data:', userData);
         // Set profile picture if available
         if (userData.profilePicture) {
           setPreviewImage(userData.profilePicture);
@@ -153,17 +156,21 @@ export default function EditProfileForm() {
             title: 'Profile updated',
             description: 'Your profile has been updated successfully',
             color: 'success',
+            timeout: 1500,
           });
-          router.push('/profile');
+          setTimeout(() => {
+            router.push('/profile');
+          }, 1500); // Redirect after a short delay
         }
       }
     } catch (error: any) {
+      console.log('Error updating profile:', error.response.data.data);
+      const errors = error.response.data.data as Object; // Access error messages comes from backend
       addToast({
         title: 'Failed to update profile',
-        description: error.message,
+        description: Object.values(errors).join('/n '), // Join error messages with newline
         color: 'danger',
       });
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -248,6 +255,20 @@ export default function EditProfileForm() {
                 <FormLabel>Phone Number</FormLabel>
                 <FormControl>
                   <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='bio'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

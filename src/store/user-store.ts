@@ -10,14 +10,14 @@ export interface User {
 }
 
 interface UserStore {
-  user: User | null;
+  user: User | null | undefined; // Use undefined to indicate loading state
   error: string | null;
   updateUser: (user: User | Partial<User> | null) => void;
   setError: (error: string | null) => void;
 }
 
 export const useUserStore = create<UserStore>()((set) => ({
-  user: null,
+  user: undefined, // Start with undefined to indicate loading state
   error: null,
 
   updateUser: (updatedUser) => {
