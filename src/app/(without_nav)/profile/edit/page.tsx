@@ -2,7 +2,6 @@ import { Card, CardHeader } from '@/components/ui/card';
 import { requireAuth } from '@/lib/server-auth';
 import EditProfileForm from './components/EditProfileForm';
 import TopNavLayout from '@/components/layouts/WithoutNavLayout';
-import { useState } from 'react';
 
 export default async function EditProfilePage() {
   const auth = await requireAuth();

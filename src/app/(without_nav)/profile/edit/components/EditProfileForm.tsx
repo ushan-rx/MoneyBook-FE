@@ -36,7 +36,6 @@ export default function EditProfileForm() {
   const [previewImage, setPreviewImage] = useState<string>('/placeholder.svg');
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
 
-  // Initialize form
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -136,12 +135,10 @@ export default function EditProfileForm() {
           'profile_pictures'
         );
         console.log('Uploaded image URL:', profilePictureUrl);
-
         // Update the form data with the new URL
         form.setValue('profilePicture', profilePictureUrl);
       }
-
-      // Create updated data object with the correct profile picture URL
+      // updated data object with the correct profile picture URL
       const updatedData = {
         ...data,
         profilePicture: profilePictureUrl,
