@@ -34,8 +34,8 @@ enum PersonalTransactionType {
 }
 
 enum MutualTransactionType {
-  LOAN = 'Loan',
-  BORROW = 'Borrow',
+  LOAN = 'LOAN',
+  BORROW = 'BORROW',
 }
 
 export {
