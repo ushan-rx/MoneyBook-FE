@@ -18,10 +18,10 @@ import { z } from 'zod';
 import { Card, CardBody } from '@heroui/card';
 import Image from 'next/image';
 import { PersonalTransactionSchema } from '@/validations/TransactionValidations';
-import { useUserStore } from '@/store/user-store';
 import LoadingDots from '@/components/LoadingDots';
 import { useMutation } from '@tanstack/react-query';
 import api from '@/lib/api';
+import { useUser } from '@/hooks/useUser';
 
 // Form Values Type infered from zod schema
 type FormValues = z.infer<typeof PersonalTransactionSchema>;
@@ -37,7 +37,7 @@ const TransactionCategoriesList = Object.entries(TransactionCategories).map(
 export default function CreatePersonalTransaction() {
   const [showSuccess, setShowSuccess] = React.useState(false);
   const [errors, setErrors] = React.useState({});
-  const { isLoading, user } = useUserStore();
+  const { isLoading, user } = useUser();
 
   const createTransactionMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -206,6 +206,7 @@ export default function CreatePersonalTransaction() {
                 <NumberInput
                   ref={ref}
                   maxValue={9999999999}
+                  minValue={0}
                   isRequired
                   className='font-semibold'
                   errorMessage={error?.message}
