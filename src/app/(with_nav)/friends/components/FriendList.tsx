@@ -1,147 +1,63 @@
+'use client';
 import DateTimeComponent from '@/components/DateTimeComponent';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { lazy } from 'react';
-const CircleUser = lazy(() =>
-  import('lucide-react').then((module) => ({ default: module.CircleUser }))
-);
+import React, { useEffect, useRef } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { apiService } from '@/lib/api';
 
-interface FriendList {
-  id: string;
-  name: string;
-  FriendBalance: number;
-  friendImage?: string;
-  LastTransaction?: {
-    amount: number;
-    name: string;
-    date: string;
-  };
+interface FriendWithTransactionSummaryDto {
+  friendName: string;
+  avatar?: string;
+  friendshipId: string;
+  lastTransactionName?: string;
+  lastTransactionType?: string;
+  lastTransactionAmount?: number;
+  lastTransactionDate?: string;
 }
 
-const data: FriendList[] = [
-  {
-    id: '1',
-    name: 'Neil Sims',
-    FriendBalance: 320,
-    friendImage:
-      'https://flowbite.com/docs/images/people/profile-picture-1.jpg',
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2025-02-08T12:09:30.000Z',
-    },
-  },
-  {
-    id: '2',
-    name: 'Micheal Brown',
-    FriendBalance: -320,
-    friendImage:
-      'https://flowbite.com/docs/images/people/profile-picture-2.jpg',
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2025-02-07T12:08:30.000Z',
-    },
-  },
-  {
-    id: '3',
-    name: 'John Doe',
-    FriendBalance: 320,
-    friendImage:
-      'https://flowbite.com/docs/images/people/profile-picture-3.jpg',
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-25T12:08:20.000Z',
-    },
-  },
-  {
-    id: '4',
-    name: 'Jane Doe',
-    FriendBalance: 320,
-    friendImage:
-      'https://flowbite.com/docs/images/people/profile-picture-4.jpg',
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-02-02T12:06:00.000Z',
-    },
-  },
-  {
-    id: '5',
-    name: 'Micheal Brown',
-    FriendBalance: -320,
-    friendImage:
-      'https://flowbite.com/docs/images/people/profile-picture-5.jpg',
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-24T12:05:00.000Z',
-    },
-  },
-  {
-    id: '6',
-    name: 'John Doe',
-    FriendBalance: 320,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-18T12:03:30.000Z',
-    },
-  },
-  {
-    id: '7',
-    name: 'John Doe',
-    FriendBalance: 0,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-18T12:03:30.000Z',
-    },
-  },
-  {
-    id: '8',
-    name: 'John Doe',
-    FriendBalance: 320,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-18T12:03:30.000Z',
-    },
-  },
-  {
-    id: '9',
-    name: 'Jane Doe',
-    FriendBalance: 320,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-17T12:00:30.000Z',
-    },
-  },
-  {
-    id: '10',
-    name: 'Jane Doe',
-    FriendBalance: 320,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-17T12:00:30.000Z',
-    },
-  },
-  {
-    id: '11',
-    name: 'Jane Doe',
-    FriendBalance: 320,
-    LastTransaction: {
-      amount: 320,
-      name: 'credit',
-      date: '2024-10-17T12:00:30.000Z',
-    },
-  },
-];
-
 export default function FriendList() {
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastFriendRef = useRef<HTMLLIElement | null>(null);
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['friends'],
+      queryFn: async ({ pageParam = 0 }) => {
+        return await apiService.get<FriendWithTransactionSummaryDto[]>(
+          '/friends/FriendDetailedList',
+          { page: pageParam, size: 10 }
+        );
+      },
+      getNextPageParam: ({ data, pagination }) =>
+        !pagination || pagination.isLast || !data || data.length === 0
+          ? undefined
+          : pagination.pageNumber + 1,
+      initialPageParam: 0,
+    });
+
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (lastFriendRef.current) {
+      observer.current.observe(lastFriendRef.current);
+    }
+
+    return () => observer.current?.disconnect();
+  }, [hasNextPage, fetchNextPage]);
+
+  const friends = data?.pages.flatMap((page) => page.data) || [];
+
+  console.log('Friends data:', friends);
   return (
     <div>
       <article className='flow-root w-full px-4'>
@@ -149,54 +65,69 @@ export default function FriendList() {
           role='list'
           className='divide-y divide-gray-200 dark:divide-gray-700'
         >
-          {data.map((friend) => (
-            <Link key={friend.id} href={`/friends/${friend.id}`}>
-              <li className='py-3 sm:py-4'>
+          {friends.map((friend, index) => (
+            <Link
+              key={friend.friendshipId}
+              href={`/friends/${friend.friendshipId}`}
+            >
+              <li
+                className='py-3 sm:py-4'
+                ref={index === friends.length - 1 ? lastFriendRef : null}
+              >
                 <div className='flex items-center space-x-4'>
                   <div className='shrink-0'>
-                    {friend.friendImage ? (
+                    {friend.avatar ? (
                       <Image
-                        src={friend.friendImage}
+                        src={friend.avatar}
                         height={32}
                         width={32}
-                        alt={friend.name}
+                        alt={friend.friendName}
                         className='rounded-full'
                       />
                     ) : (
-                      <CircleUser className='size-8 rounded-full text-gray-400 dark:text-gray-500' />
+                      <div className='flex size-8 items-center justify-center rounded-full bg-gray-400 text-white'>
+                        {friend.friendName[0]}
+                      </div>
                     )}
                   </div>
                   <div className='min-w-0 flex-1'>
                     <p className='truncate text-base font-medium text-gray-900 dark:text-white'>
-                      {friend.name}
+                      {friend.friendName}
                     </p>
-                    {friend.FriendBalance > 0 ? (
-                      <p className='truncate text-sm text-green-500 dark:text-green-400'>
-                        {`+ Rs. ${friend.FriendBalance}`}
+                    {/* {friend.lastTransactionAmount !== undefined && (
+                      <p
+                        className={`truncate text-sm ${
+                          friend.lastTransactionAmount > 0
+                            ? 'text-green-500 dark:text-green-400'
+                            : 'text-red-500 dark:text-red-400'
+                        }`}
+                      >
+                        {`${
+                          friend.lastTransactionAmount > 0 ? '+' : '-'
+                        } Rs. ${Math.abs(friend.lastTransactionAmount)}`}
                       </p>
-                    ) : friend.FriendBalance < 0 ? (
-                      <p className='truncate text-sm text-red-500 dark:text-red-400'>
-                        {`- Rs. ${Math.abs(friend.FriendBalance)}`}
-                      </p>
-                    ) : (
-                      <p className='truncate text-sm text-primary-500'>
-                        Balanced
-                      </p>
-                    )}
+                    )} */}
                   </div>
                   <div className='inline-flex flex-col items-end text-sm font-thin text-foreground/80'>
-                    {friend.LastTransaction?.date && (
+                    {friend.lastTransactionDate && (
                       <DateTimeComponent
-                        dateString={friend.LastTransaction?.date}
+                        dateString={friend.lastTransactionDate}
                         type='default'
                       />
                     )}
-                    <span className='text-foreground/50'>{`${friend.LastTransaction?.name} - Rs. ${friend.LastTransaction?.amount}`}</span>
+                    {friend.lastTransactionName && (
+                      <span className='text-foreground/50'>{`${friend.lastTransactionName} - Rs. ${friend.lastTransactionAmount}`}</span>
+                    )}
                   </div>
                 </div>
               </li>
             </Link>
           ))}
+          {isFetchingNextPage && (
+            <li className='py-4 text-center text-sm text-gray-500'>
+              Loading more...
+            </li>
+          )}
         </ul>
       </article>
     </div>

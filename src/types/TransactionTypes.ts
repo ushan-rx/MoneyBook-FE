@@ -28,9 +28,9 @@ export interface FriendSummary {
 
 // TransactionFilters interface defines the structure for filtering mutual transactions(with friends)
 export interface TransactionFilters {
-  search?: string;
-  type?: MutualTransactionType | 'ALL';
-  dateFrom?: string;
-  dateTo?: string;
-  status?: TransactionStatus | 'ALL';
+  transactionName?: string;
+  transactionType?: MutualTransactionType;
+  transactionDate_gte?: string;
+  transactionDate_lte?: string;
+  status?: TransactionStatus;
 }

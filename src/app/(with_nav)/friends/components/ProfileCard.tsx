@@ -5,7 +5,7 @@ import { Button } from '@heroui/button';
 import { Divider } from '@heroui/divider';
 import { useUserStore } from '@/store/user-store';
 import { useMutation } from '@tanstack/react-query';
-import { ApiErrorResponse, apiService } from '@/lib/api';
+import { apiService } from '@/lib/api';
 import { AxiosError } from 'axios';
 
 interface ProfileCardProps {
