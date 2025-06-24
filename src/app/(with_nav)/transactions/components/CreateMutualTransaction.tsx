@@ -18,6 +18,7 @@ import { useDebounce } from 'use-debounce';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiResponse, apiService } from '@/lib/api';
 import { addToast } from '@heroui/toast';
+import { request } from 'http';
 const FriendSearchListbox = React.lazy(() => import('./FriendSearchListbox'));
 
 // backend friend search result DTO
@@ -46,6 +47,7 @@ interface MutualTransactionDto {
   lenderID: string;
   otp: string;
   status: string;
+  requestedTo: string;
   qrPayload: QrPayload;
 }
 
@@ -104,6 +106,7 @@ export default function CreateMutualTransaction() {
       transactionName: '',
       date: parseAbsoluteToLocal(new Date().toISOString()),
       description: '',
+      requestedTo: '',
       lenderID: currentUser?.userId || '',
       borrowerID: '', // Will be set by useEffect or remain empty if no friend selected
     }),
@@ -116,10 +119,9 @@ export default function CreateMutualTransaction() {
     control,
     formState,
     setValue,
-    getValues,
     watch,
     register,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(CreateMutualTransactionSchema),
     defaultValues: defaultFormValues,
@@ -157,6 +159,10 @@ export default function CreateMutualTransaction() {
       shouldValidate: validateNow || !!selectedFriendUserId,
     });
     setValue('borrowerID', borrowerId, {
+      shouldValidate: validateNow || !!selectedFriendUserId,
+    });
+    // Set requestedTo to the selected friend's user ID or empty string
+    setValue('requestedTo', friendId, {
       shouldValidate: validateNow || !!selectedFriendUserId,
     });
   }, [
@@ -198,6 +204,9 @@ export default function CreateMutualTransaction() {
       console.error('Current user not loaded for transaction.');
       return;
     }
+    // if(data.requestedTo === '') {
+    //   data.requestedTo = selectedFriendUserId || '';
+    // }
     const transactionDate = data.date.toAbsoluteString();
     const { date, ...formData } = data;
     const payload = {
@@ -205,6 +214,7 @@ export default function CreateMutualTransaction() {
       transactionDate,
       amount: Number(formData.amount), // Ensure transction amount is number
     };
+    console.log('Submitting transaction payload:', payload);
     createTransactionMutation.mutate(payload);
   };
 

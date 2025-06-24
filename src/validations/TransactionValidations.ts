@@ -33,6 +33,7 @@ const CreateMutualTransactionSchema = z.object({
   ),
   borrowerID: z.string({ message: 'Friend is required' }).nonempty(),
   lenderID: z.string().nonempty(),
+  requestedTo: z.string().nonempty(),
 });
 
 const PersonalTransactionSchema = z.object({

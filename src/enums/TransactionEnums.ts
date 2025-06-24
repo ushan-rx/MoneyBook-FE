@@ -22,10 +22,10 @@ enum TransactionCategories {
 }
 
 enum TransactionStatus {
-  PENDING = 'Pending',
-  ACCEPTED = 'Accepted',
-  REJECTED = 'Rejected',
-  CANCELLED = 'Cancelled',
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED',
 }
 
 enum PersonalTransactionType {
