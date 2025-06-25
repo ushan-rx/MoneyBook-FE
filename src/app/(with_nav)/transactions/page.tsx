@@ -1,7 +1,7 @@
 import LoadingDots from '@/components/LoadingDots';
 import { Button } from '@heroui/button';
 import { Divider } from '@heroui/divider';
-import { Search } from 'lucide-react';
+import { Search, TicketCheck } from 'lucide-react';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 import AddTransactionDrawer from './components/AddTransactionDrawer';
@@ -23,10 +23,21 @@ export default async function Transactions() {
               radius='full'
               variant='faded'
               color='primary'
-              aria-label='search friend'
+              aria-label='search transaction'
             >
               <Search />
               <Link href={'#'}></Link>
+            </Button>
+            <Button
+              isIconOnly
+              radius='full'
+              variant='faded'
+              color='primary'
+              aria-label='accept transaction request'
+            >
+              <Link href={'/transactions/requests'}>
+                <TicketCheck />
+              </Link>
             </Button>
             <AddTransactionDrawer />
           </div>

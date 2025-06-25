@@ -12,6 +12,7 @@ export interface MutualTransaction {
   transactionType: MutualTransactionType;
   borrowerID: string;
   lenderID: string;
+  requestedTo: string; // User ID of the person to whom the transaction is requested
   status: TransactionStatus;
 }
 
